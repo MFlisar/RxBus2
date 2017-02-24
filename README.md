@@ -1,6 +1,8 @@
-###RXBus [![Release](https://jitpack.io/v/MFlisar/RXBus2.svg)](https://jitpack.io/#MFlisar/RXBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RXBus-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3520)
+###RXBus [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2)
 
-TODO: Anpassen RxJava => RxJava2!!!
+###RxJava V1:
+
+If you are looking for a version for RxJava V1, look [here](https://jitpack.io/MFlisar/RxBus)
 
 ### What does it do?
 
@@ -21,13 +23,9 @@ repositories {
 2. add the compile statement to your module's `build.gradle`:
 ```groovy
 dependencies {
-    compile 'com.github.MFlisar:RXBus:1.0'
+    compile 'com.github.MFlisar:RxBus2:0.1'
 }
 ```
-
-### Migration
-
-If you update from version <0.5 or version <0.9, follow this short migration guide: [MIGRATION GUIDE](https://github.com/MFlisar/RXBus/blob/master/MIGRATION.md)
 
 ### Usage
 
@@ -43,7 +41,7 @@ If you update from version <0.5 or version <0.9, follow this short migration gui
 
 #####Demo
 
-Just check out the [DemoActivity](https://github.com/MFlisar/RXBus/blob/master/demo/src/main/java/com/michaelflisar/rxbus/demo/DemoActivity.java), it will show the base usage and the difference between the default and the queued `RXBus`
+Just check out the [DemoActivity](https://github.com/MFlisar/RxBus2/blob/master/demo/src/main/java/com/michaelflisar/rxbus2/demo/DemoActivity.java), it will show the base usage and the difference between the default and the queued `RxBus`
 
 #####Simple usage
 
