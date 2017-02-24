@@ -1,4 +1,4 @@
-###RXBus [![Release](https://jitpack.io/v/MFlisar/RXBus.svg)](https://jitpack.io/#MFlisar/RXBus) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RXBus-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3520)
+###RXBus [![Release](https://jitpack.io/v/MFlisar/RXBus2.svg)](https://jitpack.io/#MFlisar/RXBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RXBus-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/3520)
 
 TODO: Anpassen RxJava => RxJava2!!!
 
