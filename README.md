@@ -1,8 +1,8 @@
-###RXBus [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2)
+###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2)
 
 ###RxJava V1:
 
-If you are looking for a version for RxJava V1, look [here](https://jitpack.io/MFlisar/RxBus)
+If you are looking for a version for RxJava V1, look [here](https://jitpack.io/MFlisar/RXBus)
 
 ### What does it do?
 
