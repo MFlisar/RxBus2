@@ -15,7 +15,7 @@ import io.reactivex.processors.BehaviorProcessor;
  */
 public class PauseAwareActivity extends AppCompatActivity implements IRxBusQueue
 {
-    private static final String TAG = PauseAwareActivity.class.getSimpleName();
+    private static final String TAG = "RxBus2 - " + PauseAwareActivity.class.getSimpleName();
 
     private final BehaviorProcessor<Boolean> mResumedProcessor = BehaviorProcessor.createDefault(false);
 

@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.michaelflisar.rxbus"
+        applicationId "com.michaelflisar.rxbus2.demo"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1

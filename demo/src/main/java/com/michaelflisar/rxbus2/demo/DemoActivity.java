@@ -19,7 +19,7 @@ import io.reactivex.functions.Function;
  */
 public class DemoActivity extends PauseAwareActivity
 {
-    private static final String TAG = DemoActivity.class.getSimpleName();
+    private static final String TAG = "RxBus2 - " + DemoActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -118,11 +118,11 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
         // ATTENTION: this disposable MUST be handled by you, unsubscribe whenever you want!
-        // currently it will leak the activity!!!
+        // Currently it will leak the Activity!!!
 
         // 2) Subscribe to an event and let RxDisposableManager manage your disposable - you just need to call
         // RxDisposableManager.unsubscribe(boundObject); to unsubscribe ALL disposables for a bound object
-        // additionally this here enable queuing + emits items on the main thread
+        // additionally this here enablea queuing + emits items on the main thread
         RxBusBuilder.create(String.class)
                 .withQueuing(this)          // optional: if enabled, events will be queued while the IRxBusQueue is paused!
                 .withBound(this)            // optional: this binds the subcritpion to this object and you can unsubscribe all bound disposables at once
