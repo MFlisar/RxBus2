@@ -90,6 +90,7 @@ public class RxBusSenderBuilder
         if (mKey == null || mSendToDefaultBus)
         {
             Processor processor = RxBus.getInstance().getProcessor(mCast == null ? event.getClass() : mCast, false);
+
             // only send event, if processor exists => this means someone has at least once subscribed to it
             if (processor != null)
             {

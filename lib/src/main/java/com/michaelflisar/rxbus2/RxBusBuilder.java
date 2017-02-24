@@ -38,12 +38,12 @@ public class RxBusBuilder<T>
 
     private Object mBoundObject = null;
 
-    public static <T> RxBusBuilder<T> create(Class<T> eventClass)
+    static <T> RxBusBuilder<T> create(Class<T> eventClass)
     {
         return new RxBusBuilder<T>(eventClass);
     }
 
-    public RxBusBuilder(Class<T> eventClass)
+    RxBusBuilder(Class<T> eventClass)
     {
         mEventClass = eventClass;
     }
@@ -152,7 +152,7 @@ public class RxBusBuilder<T>
             flowable = flowable.onBackpressureBuffer();
 
         if (mQueuer != null)
-            flowable = flowable.compose(FlowableTransformers.valve(mQueuer.getResumeObservable(), mQueuer.isBusResumed(), mValvePrefetch));
+            flowable = flowable.compose(FlowableTransformers.<T>valve(mQueuer.getResumeObservable(), mQueuer.isBusResumed(), mValvePrefetch));
         if (applySchedular)
             flowable = applySchedular(flowable);
         return flowable;
@@ -235,12 +235,12 @@ public class RxBusBuilder<T>
         return disposable;
     }
 
-    private <X> Flowable<X> applySchedular(Flowable<X> flowable)
+    private Flowable<T> applySchedular(Flowable<T> flowable)
     {
         if (mBusMode == RxBusMode.Background)
-            return flowable.compose(RxUtil.<X>applyBackgroundSchedulers());
+            return flowable.compose(RxUtil.<T>applyBackgroundSchedulers());
         else if (mBusMode == RxBusMode.Main)
-            return flowable.compose(RxUtil.<X>applySchedulars());
+            return flowable.compose(RxUtil.<T>applySchedulars());
         return flowable;
     }
 }

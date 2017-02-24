@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.michaelflisar.rxbus2.RxBus;
-import com.michaelflisar.rxbus2.RxBusBuilder;
 import com.michaelflisar.rxbus2.rx.RxBusMode;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
 
@@ -110,7 +109,7 @@ public class DemoActivity extends PauseAwareActivity
     private void testGeneral()
     {
         // 1) Just subscribe to a bus event => use the builders subscribe overload for this!
-        Disposable disposableManual = RxBusBuilder.create(String.class)
+        Disposable disposableManual = RxBus.build(String.class)
                 .subscribe(new Consumer<String>(){
                     @Override
                     public void accept(String s) {
@@ -123,7 +122,7 @@ public class DemoActivity extends PauseAwareActivity
         // 2) Subscribe to an event and let RxDisposableManager manage your disposable - you just need to call
         // RxDisposableManager.unsubscribe(boundObject); to unsubscribe ALL disposables for a bound object
         // additionally this here enablea queuing + emits items on the main thread
-        RxBusBuilder.create(String.class)
+        RxBus.build(String.class)
                 .withQueuing(this)          // optional: if enabled, events will be queued while the IRxBusQueue is paused!
                 .withBound(this)            // optional: this binds the subcritpion to this object and you can unsubscribe all bound disposables at once
                 .withMode(RxBusMode.Main)   // optional: set the thread to main or background if wanted, events will be emitted on the corresponding thread
@@ -136,7 +135,7 @@ public class DemoActivity extends PauseAwareActivity
 
         // 3) Get a simple Flowable and do whatever you want with it
         // all RxBus options like queuing and keys are available here as well!!!
-        Flowable<String> flowable = RxBusBuilder.create(String.class)
+        Flowable<String> flowable = RxBus.build(String.class)
                 // optional:
 //                .withQueuing(this)
 //                .withKey(...)
@@ -150,7 +149,7 @@ public class DemoActivity extends PauseAwareActivity
 
         // 1) Subscribe to a string event and only listen to a special key (+ queuing is enabled as well)
         // Disposable is managed automatically as well by RxDisposableManager
-        RxBusBuilder.create(String.class)
+        RxBus.build(String.class)
                 // all optional!!!
                 .withQueuing(this)
                 .withBound(this)
@@ -163,7 +162,7 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        RxBusBuilder.create(String.class)
+        RxBus.build(String.class)
                 // all optional!!!
                 .withQueuing(this)
                 .withBound(this)
@@ -176,7 +175,7 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        Flowable<String> flowable = RxBusBuilder.create(String.class)
+        Flowable<String> flowable = RxBus.build(String.class)
                 .withQueuing(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
                 .build();
@@ -185,7 +184,7 @@ public class DemoActivity extends PauseAwareActivity
     private void testAdvanced()
     {
         // 1) subscribe to a string event but emit integers => just pass in a transformer to the subcribe function!
-        RxBusBuilder.create(String.class)
+        RxBus.build(String.class)
                 .withQueuing(this)
                 .withBound(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
@@ -209,7 +208,7 @@ public class DemoActivity extends PauseAwareActivity
                 });
 
         // 2) You need more control or dont want to use the transformer to compose a new Flowable? Then create an Flowable only and do the rest yourself!
-        Flowable<String> flowable = RxBusBuilder.create(String.class)
+        Flowable<String> flowable = RxBus.build(String.class)
                 .withQueuing(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
                 .build();

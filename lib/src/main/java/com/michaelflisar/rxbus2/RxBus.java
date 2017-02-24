@@ -21,7 +21,7 @@ public class RxBus
 
     private static RxBus INSTANCE = null;
 
-    public static RxBus getInstance()
+    static RxBus getInstance()
     {
         if (INSTANCE == null)
             INSTANCE = new RxBus();
@@ -33,15 +33,23 @@ public class RxBus
     private HashMap<RxQueueKey, Processor> mProcessorKeys = new HashMap<>();
 
     // ---------------------------
-    // public bus functions - send events => returns a fresh builder to send events to the bus
+    // public bus functions - send events => returns a fresh build to send events to the bus
     // ---------------------------
 
     /**
-     * Returns a fresh event sender builder to send events to the bus
+     * Returns a fresh event get build to send events to the bus
      */
     public static synchronized RxBusSenderBuilder get()
     {
         return new RxBusSenderBuilder();
+    }
+
+    /**
+     * Returns a fresh event subscribe build to subcribe to events
+     */
+    public static <T> RxBusBuilder<T> build(Class<T> eventClass)
+    {
+        return new RxBusBuilder<T>(eventClass);
     }
 
     // ---------------------------
