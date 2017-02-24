@@ -4,11 +4,11 @@ import com.michaelflisar.rxbus2.interfaces.IRxBusQueue;
 import com.michaelflisar.rxbus2.rx.RxUtil;
 
 import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * Created by flisar on 02.05.2016.
@@ -28,45 +28,10 @@ public class RxBusUtil
         };
     }
 
-    protected static <T> Observer<T> wrapObserver(Observer<T> observer, IRxBusQueue isResumedProvider)
+    protected static <T> DisposableSubscriber<T> wrapSubscriber(DisposableSubscriber<T> subscriber, IRxBusQueue isResumedProvider)
     {
-        return new Observer<T>()
+        return new DisposableSubscriber<T>()
         {
-            @Override
-            public void onSubscribe(Disposable d) {
-                observer.onSubscribe(d);
-            }
-
-            @Override
-            public void onComplete()
-            {
-                observer.onComplete();
-            }
-
-            @Override
-            public void onError(Throwable e)
-            {
-                observer.onError(e);
-            }
-
-            @Override
-            public void onNext(T t)
-            {
-                if (RxUtil.safetyQueueCheck(t, isResumedProvider))
-                    observer.onNext(t);
-            }
-        };
-    }
-
-    protected static <T> Subscriber<T> wrapSubscriber(Subscriber<T> subscriber, IRxBusQueue isResumedProvider)
-    {
-        return new Subscriber<T>()
-        {
-            @Override
-            public void onSubscribe(Subscription s) {
-                subscriber.onSubscribe(s);
-            }
-
             @Override
             public void onComplete()
             {

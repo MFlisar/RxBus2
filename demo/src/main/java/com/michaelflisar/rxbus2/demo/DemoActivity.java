@@ -1,4 +1,4 @@
-package com.michaelflisar.rxbus.demo;
+package com.michaelflisar.rxbus2.demo;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -83,8 +83,8 @@ public class DemoActivity extends PauseAwareActivity
     @Override
     public void onDestroy()
     {
-        // unsubscribe - we used the RXSubscriptionManager for every subscription and bound all subscriptions to this class,
-        // so following will safely unsubscribe every subscription
+        // unsubscribe - we used the RxDisposableManager for every disposable and bound all disposables to this class,
+        // so following will safely unsubscribe every disposable
         RxDisposableManager.unsubscribe(this);
         super.onDestroy();
     }
@@ -117,15 +117,15 @@ public class DemoActivity extends PauseAwareActivity
                         logEvent(s, false, null, null);
                     }
                 });
-        // ATTENTION: this subscription MUST be handled by you, unsubscribe whenever you want!
+        // ATTENTION: this disposable MUST be handled by you, unsubscribe whenever you want!
         // currently it will leak the activity!!!
 
-        // 2) Subscribe to an event and let RXSubscriptionManager manage your subscription - you just need to call
-        // RXSubscriptionManager.unsubscribe(boundObject); to unsubscribe ALL subscriptions for a bound object
+        // 2) Subscribe to an event and let RxDisposableManager manage your disposable - you just need to call
+        // RxDisposableManager.unsubscribe(boundObject); to unsubscribe ALL disposables for a bound object
         // additionally this here enable queuing + emits items on the main thread
         RxBusBuilder.create(String.class)
                 .withQueuing(this)          // optional: if enabled, events will be queued while the IRxBusQueue is paused!
-                .withBound(this)            // optional: this binds the subcritpion to this object and you can unsubscribe all bound subscriptions at once
+                .withBound(this)            // optional: this binds the subcritpion to this object and you can unsubscribe all bound disposables at once
                 .withMode(RxBusMode.Main)   // optional: set the thread to main or background if wanted, events will be emitted on the corresponding thread
                 .subscribe(new Consumer<String>(){
                     @Override
@@ -134,14 +134,14 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        // 3) Get a simple observable and do whatever you want with it
+        // 3) Get a simple Flowable and do whatever you want with it
         // all RxBus options like queuing and keys are available here as well!!!
-        Flowable<String> observable = RxBusBuilder.create(String.class)
+        Flowable<String> flowable = RxBusBuilder.create(String.class)
                 // optional:
 //                .withQueuing(this)
 //                .withKey(...)
                 .build();
-        // do something with this observable...
+        // do something with this Flowable...
     }
 
     private void testWithKeys()
@@ -149,7 +149,7 @@ public class DemoActivity extends PauseAwareActivity
         // you can use everything that is shown in testGeneral here as well, example will not show all possible combinations!
 
         // 1) Subscribe to a string event and only listen to a special key (+ queuing is enabled as well)
-        // Subscription is managed automatically as well by RXSubscriptionManager
+        // Disposable is managed automatically as well by RxDisposableManager
         RxBusBuilder.create(String.class)
                 // all optional!!!
                 .withQueuing(this)
@@ -197,8 +197,8 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 }, new FlowableTransformer<String, Integer>() {
                     @Override
-                    public Flowable<Integer> apply(Flowable<String> observable) {
-                        return observable
+                    public Flowable<Integer> apply(Flowable<String> flowable) {
+                        return flowable
                                 .map(new Function<String, Integer>() {
                                     @Override
                                     public Integer apply(String s) {
@@ -208,13 +208,13 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        // 2) You need more control or dont want to use the transformer to compose a new observable? Then create an observable only and do the rest yourself!
+        // 2) You need more control or dont want to use the transformer to compose a new Flowable? Then create an Flowable only and do the rest yourself!
         Flowable<String> flowable = RxBusBuilder.create(String.class)
                 .withQueuing(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
                 .build();
 
-        // do whatever youn want with the observable
+        // do whatever youn want with the flowable
         Flowable result = flowable
 //                ....
 //                .toList(...)
@@ -227,7 +227,7 @@ public class DemoActivity extends PauseAwareActivity
                 // ...
             }
         });
-        // Don't forget to manage the subcription!! If you want you can use the RXSubscriptionManager manually here:
+        // Don't forget to manage the subcription!! If you want you can use the RxDisposableManager manually here:
         RxDisposableManager.addDisposable(this, disposable);
     }
 }

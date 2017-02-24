@@ -18,6 +18,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.exceptions.OnErrorNotImplementedException;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * Created by Michael on 01.05.2016.
@@ -166,24 +167,27 @@ public class RxBusBuilder<T>
         return subscribe(onNext, null, null, null);
     }
 
-    public <R> Disposable subscribe(Consumer<R> onNext, FlowableTransformer<T, R> transformer)
-    {
-        return subscribe(onNext, null, null, transformer);
-    }
-
     public Disposable subscribe(Consumer<T> onNext, Consumer<Throwable> onError)
     {
         return subscribe(onNext, onError, null, null);
     }
 
+
+    public Disposable subscribe(Consumer<T> onNext, Consumer<Throwable> onError, Action onComplete)
+    {
+        return subscribe(onNext, onError, onComplete, null);
+    }
+
+
+    public <R> Disposable subscribe(Consumer<R> onNext, FlowableTransformer<T, R> transformer)
+    {
+        return subscribe(onNext, null, null, transformer);
+    }
+
+
     public <R> Disposable subscribe(Consumer<R> onNext, Consumer<Throwable> onError, FlowableTransformer<T, R> transformer)
     {
         return subscribe(onNext, onError, null, transformer);
-    }
-
-    public Disposable subscribe(Consumer<T> onNext, Consumer<Throwable> onError, Action onCompleted)
-    {
-        return subscribe(onNext, onError, onCompleted, null);
     }
 
     // ---------------------------
@@ -214,7 +218,7 @@ public class RxBusBuilder<T>
         return disposable;
     }
 
-    public <R> Disposable subscribe(Subscriber<R> subscriber, FlowableTransformer<T, R> transformer)
+    public <R> Disposable subscribe(DisposableSubscriber<R> subscriber, FlowableTransformer<T, R> transformer)
     {
         Flowable flowable = build(false);
         if (transformer != null)
@@ -225,24 +229,7 @@ public class RxBusBuilder<T>
             actualSubscriber = RxBusUtil.wrapSubscriber(subscriber, mQueuer);
 
         flowable = applySchedular(flowable);
-        Disposable disposable = flowable.subscribeWith(actualSubscriber);
-        if (mBoundObject != null)
-            RxDisposableManager.addDisposable(mBoundObject, disposable);
-        return disposable;
-    }
-
-    public <R> Disposable subscribe(Subscriber<R> subscriber, FlowableTransformer<T, R> transformer)
-    {
-        Flowable flowable = build(false);
-        if (transformer != null)
-            flowable = flowable.compose(transformer);
-
-        Subscriber<R> actualSubscriber = subscriber;
-        if (mQueuer != null && mQueueSubscriptionSafetyCheckEnabled)
-            actualSubscriber = RxBusUtil.wrapSubscriber(subscriber, mQueuer);
-
-        flowable = applySchedular(flowable);
-        Disposable disposable = flowable.subscribe(actualSubscriber);
+        Disposable disposable = (DisposableSubscriber)flowable.subscribeWith(actualSubscriber);
         if (mBoundObject != null)
             RxDisposableManager.addDisposable(mBoundObject, disposable);
         return disposable;

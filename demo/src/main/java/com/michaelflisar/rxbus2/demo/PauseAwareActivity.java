@@ -1,4 +1,4 @@
-package com.michaelflisar.rxbus.demo;
+package com.michaelflisar.rxbus2.demo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,7 +17,7 @@ public class PauseAwareActivity extends AppCompatActivity implements IRxBusQueue
 {
     private static final String TAG = PauseAwareActivity.class.getSimpleName();
 
-    private final BehaviorProcessor<Boolean> mResumedObject = BehaviorProcessor.createDefault(false);
+    private final BehaviorProcessor<Boolean> mResumedProcessor = BehaviorProcessor.createDefault(false);
 
     public PauseAwareActivity()
     {
@@ -29,7 +29,7 @@ public class PauseAwareActivity extends AppCompatActivity implements IRxBusQueue
     {
         super.onResume();
         Log.d(TAG, "BASE BEFORE BUS onResume");
-        mResumedObject.onNext(true);
+        mResumedProcessor.onNext(true);
         Log.d(TAG, "BASE AFTER BUS onResume");
     }
 
@@ -37,7 +37,7 @@ public class PauseAwareActivity extends AppCompatActivity implements IRxBusQueue
     protected void onPause()
     {
         Log.d(TAG, "BASE BEFORE BUS onPause");
-        mResumedObject.onNext(false);
+        mResumedProcessor.onNext(false);
         Log.d(TAG, "BASE AFTER BUS onPause");
         super.onPause();
     }
@@ -50,18 +50,18 @@ public class PauseAwareActivity extends AppCompatActivity implements IRxBusQueue
     }
 
     // --------------
-    // Interface RXBus
+    // Interface RxBus
     // --------------
 
     @Override
     public boolean isBusResumed()
     {
-        return mResumedObject.getValue();
+        return mResumedProcessor.getValue();
     }
 
     @Override
     public Publisher<Boolean> getResumeObservable()
     {
-        return mResumedObject;
+        return mResumedProcessor;
     }
 }
