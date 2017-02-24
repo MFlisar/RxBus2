@@ -2,7 +2,7 @@
 
 ###RxJava V1:
 
-If you are looking for a version for RxJava V1, look [here](https://jitpack.io/MFlisar/RXBus)
+If you are looking for a version for RxJava V1, look [here](https://github.com/MFlisar/RXBus)
 
 ### What does it do?
 
