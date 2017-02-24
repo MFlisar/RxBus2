@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.michaelflisar.rxbus2.RxBus;
 import com.michaelflisar.rxbus2.RxBusBuilder;
-import com.michaelflisar.rxbus2.demo.classes.TestClass;
+import com.michaelflisar.rxbus2.demo.classes.TestEvent;
 import com.michaelflisar.rxbus2.rx.RxBusMode;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
+
+import org.reactivestreams.Subscription;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
@@ -71,16 +73,16 @@ public class DemoActivity extends PauseAwareActivity
                     .send(getLogMessage("onCreate", "KEY 2 (AND ALL String listeners) main thread i=" + i));
         }
 
-        // lets send some TestClass and sub class events and check, if the listener of TestClass receives the sub classes as well
+        // lets send some TestEvent and sub class events and check, if the listener of TestEvent receives the sub classes as well
         // => we achieve that via the cast operator!
         // without the cast operator, only concrete class bs observers will receive the event!
-        RxBus.get().send(new TestClass());
+        RxBus.get().send(new TestEvent());
         RxBus.get()
-                .withCast(TestClass.class)
-                .send(new TestClass.TestSubClass1());
+                .withCast(TestEvent.class)
+                .send(new TestEvent.TestSubEvent1());
         RxBus.get()
-                .withCast(TestClass.class)
-                .send(new TestClass.TestSubClass2());
+                .withCast(TestEvent.class)
+                .send(new TestEvent.TestSubEvent2());
     }
 
     @Override
@@ -256,15 +258,15 @@ public class DemoActivity extends PauseAwareActivity
 
     private void testAdvancedWithCast()
     {
-        // subscribe to a TestClass event
-        RxBusBuilder.create(TestClass.class)
+        // subscribe to a TestEvent event
+        RxBusBuilder.create(TestEvent.class)
                 .withQueuing(this)
                 .withBound(this)
                 .withMode(RxBusMode.Main)
-                .subscribe(new Consumer<TestClass>() {
+                .subscribe(new Consumer<TestEvent>() {
                     @Override
-                    public void accept(TestClass s) {
-                        logEvent(TestClass.class.getSimpleName(), true, null, " [ActualClass: " + s.getClass().getSimpleName() + "]");
+                    public void accept(TestEvent s) {
+                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.getClass().getSimpleName() + "]");
                     }
                 });
     }
