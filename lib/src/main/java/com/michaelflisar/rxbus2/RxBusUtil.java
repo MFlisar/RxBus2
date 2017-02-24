@@ -15,7 +15,7 @@ import io.reactivex.subscribers.DisposableSubscriber;
  */
 public class RxBusUtil
 {
-    protected static <T> Consumer<T> wrapQueueAction(Consumer<T> action, IRxBusQueue isResumedProvider)
+    protected static <T> Consumer<T> wrapQueueConsumer(Consumer<T> action, IRxBusQueue isResumedProvider)
     {
         return new Consumer<T>()
         {

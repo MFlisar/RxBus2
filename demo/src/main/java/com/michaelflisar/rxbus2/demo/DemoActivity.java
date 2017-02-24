@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.michaelflisar.rxbus2.RxBus;
+import com.michaelflisar.rxbus2.RxBusBuilder;
+import com.michaelflisar.rxbus2.demo.classes.TestClass;
 import com.michaelflisar.rxbus2.rx.RxBusMode;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
 
@@ -29,6 +31,7 @@ public class DemoActivity extends PauseAwareActivity
         testGeneral();
         testWithKeys();
         testAdvanced();
+        testAdvancedWithCast();
 
         // -----------------
         // Send some events
@@ -46,17 +49,38 @@ public class DemoActivity extends PauseAwareActivity
             {
                 Log.d(TAG, "Thread startet...");
                 for (int i = 0; i < 5; i++)
+                {
                     RxBus.get().send(getLogMessage("onCreate", "some thread i=" + i));
+                }
             }
         }).start();
 
-        // lets send some events bound to a key (can be a string or an integer)
-        // 1 loop: sends events to the given key ONLY
-        // 2 loop: sends events to all observers of the key AND to all simple String event observer
+        // lets send some events bound to a withKey (can be a string or an integer)
+        // 1 loop: sends events to the given withKey ONLY
+        // 2 loop: sends events to all observers of the withKey AND to all simple String event observer
         for (int i = 0; i < 5; i++)
-            RxBus.get().key(R.id.custom_event_id_1).send(getLogMessage("onCreate", "KEY 1 main thread i=" + i));
+        {
+            RxBus.get()
+                    .withKey(R.id.custom_event_id_1)
+                    .send(getLogMessage("onCreate", "KEY 1 main thread i=" + i));
+        }
         for (int i = 0; i < 5; i++)
-            RxBus.get().key(R.id.custom_event_id_2).sendToDefaultBus().send(getLogMessage("onCreate", "KEY 2 (AND ALL String listeners) main thread i=" + i));
+        {
+            RxBus.get()
+                    .withKey(R.id.custom_event_id_2).withSendToDefaultBus()
+                    .send(getLogMessage("onCreate", "KEY 2 (AND ALL String listeners) main thread i=" + i));
+        }
+
+        // lets send some TestClass and sub class events and check, if the listener of TestClass receives the sub classes as well
+        // => we achieve that via the cast operator!
+        // without the cast operator, only concrete class bs observers will receive the event!
+        RxBus.get().send(new TestClass());
+        RxBus.get()
+                .withCast(TestClass.class)
+                .send(new TestClass.TestSubClass1());
+        RxBus.get()
+                .withCast(TestClass.class)
+                .send(new TestClass.TestSubClass2());
     }
 
     @Override
@@ -99,7 +123,7 @@ public class DemoActivity extends PauseAwareActivity
 
     private void logEvent(String event, boolean queuedBus, String key, String extra)
     {
-        Log.d(TAG, String.format("Type: %s%s (key=%s), Event: %s", queuedBus ? "QUEUED BUS" : "SIMPLE BUS", extra != null ? extra : "", key == null ? "NONE" : key, event));
+        Log.d(TAG, String.format("Type: %s%s (withKey=%s), Event: %s", queuedBus ? "QUEUED BUS" : "SIMPLE BUS", extra != null ? extra : "", key == null ? "NONE" : key, event));
     }
 
     // -----------------------------
@@ -109,7 +133,7 @@ public class DemoActivity extends PauseAwareActivity
     private void testGeneral()
     {
         // 1) Just subscribe to a bus event => use the builders subscribe overload for this!
-        Disposable disposableManual = RxBus.build(String.class)
+        Disposable disposableManual = RxBusBuilder.create(String.class)
                 .subscribe(new Consumer<String>(){
                     @Override
                     public void accept(String s) {
@@ -122,7 +146,7 @@ public class DemoActivity extends PauseAwareActivity
         // 2) Subscribe to an event and let RxDisposableManager manage your disposable - you just need to call
         // RxDisposableManager.unsubscribe(boundObject); to unsubscribe ALL disposables for a bound object
         // additionally this here enablea queuing + emits items on the main thread
-        RxBus.build(String.class)
+        RxBusBuilder.create(String.class)
                 .withQueuing(this)          // optional: if enabled, events will be queued while the IRxBusQueue is paused!
                 .withBound(this)            // optional: this binds the subcritpion to this object and you can unsubscribe all bound disposables at once
                 .withMode(RxBusMode.Main)   // optional: set the thread to main or background if wanted, events will be emitted on the corresponding thread
@@ -135,7 +159,7 @@ public class DemoActivity extends PauseAwareActivity
 
         // 3) Get a simple Flowable and do whatever you want with it
         // all RxBus options like queuing and keys are available here as well!!!
-        Flowable<String> flowable = RxBus.build(String.class)
+        Flowable<String> flowable = RxBusBuilder.create(String.class)
                 // optional:
 //                .withQueuing(this)
 //                .withKey(...)
@@ -147,9 +171,9 @@ public class DemoActivity extends PauseAwareActivity
     {
         // you can use everything that is shown in testGeneral here as well, example will not show all possible combinations!
 
-        // 1) Subscribe to a string event and only listen to a special key (+ queuing is enabled as well)
+        // 1) Subscribe to a string event and only listen to a special withKey (+ queuing is enabled as well)
         // Disposable is managed automatically as well by RxDisposableManager
-        RxBus.build(String.class)
+        RxBusBuilder.create(String.class)
                 // all optional!!!
                 .withQueuing(this)
                 .withBound(this)
@@ -162,7 +186,7 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        RxBus.build(String.class)
+        RxBusBuilder.create(String.class)
                 // all optional!!!
                 .withQueuing(this)
                 .withBound(this)
@@ -175,7 +199,7 @@ public class DemoActivity extends PauseAwareActivity
                     }
                 });
 
-        Flowable<String> flowable = RxBus.build(String.class)
+        Flowable<String> flowable = RxBusBuilder.create(String.class)
                 .withQueuing(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
                 .build();
@@ -184,7 +208,7 @@ public class DemoActivity extends PauseAwareActivity
     private void testAdvanced()
     {
         // 1) subscribe to a string event but emit integers => just pass in a transformer to the subcribe function!
-        RxBus.build(String.class)
+        RxBusBuilder.create(String.class)
                 .withQueuing(this)
                 .withBound(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
@@ -208,7 +232,7 @@ public class DemoActivity extends PauseAwareActivity
                 });
 
         // 2) You need more control or dont want to use the transformer to compose a new Flowable? Then create an Flowable only and do the rest yourself!
-        Flowable<String> flowable = RxBus.build(String.class)
+        Flowable<String> flowable = RxBusBuilder.create(String.class)
                 .withQueuing(this)
                 .withKey(R.id.custom_event_id_1) // you may add multiple keys as well!
                 .build();
@@ -228,5 +252,20 @@ public class DemoActivity extends PauseAwareActivity
         });
         // Don't forget to manage the subcription!! If you want you can use the RxDisposableManager manually here:
         RxDisposableManager.addDisposable(this, disposable);
+    }
+
+    private void testAdvancedWithCast()
+    {
+        // subscribe to a TestClass event
+        RxBusBuilder.create(TestClass.class)
+                .withQueuing(this)
+                .withBound(this)
+                .withMode(RxBusMode.Main)
+                .subscribe(new Consumer<TestClass>() {
+                    @Override
+                    public void accept(TestClass s) {
+                        logEvent(TestClass.class.getSimpleName(), true, null, " [ActualClass: " + s.getClass().getSimpleName() + "]");
+                    }
+                });
     }
 }

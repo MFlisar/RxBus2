@@ -28,7 +28,7 @@ public class RxBus
         return INSTANCE;
     }
 
-    // for better speed, we use different maps => no wrapper key generation needed if you just want to use a default class based bus
+    // for better speed, we use different maps => no wrapper withKey generation needed if you just want to use a default class based bus
     private HashMap<Class<?>, Processor> mProcessorClasses = new HashMap<>();
     private HashMap<RxQueueKey, Processor> mProcessorKeys = new HashMap<>();
 
@@ -44,25 +44,17 @@ public class RxBus
         return new RxBusSenderBuilder();
     }
 
-    /**
-     * Returns a fresh event subscribe build to subcribe to events
-     */
-    public static <T> RxBusBuilder<T> build(Class<T> eventClass)
-    {
-        return new RxBusBuilder<T>(eventClass);
-    }
-
     // ---------------------------
-    // public bus functions - observe events
+    // package internal bus functions - used by RxBusBuilder only
     // ---------------------------
 
     /**
      * Get an observable that observes all events of the the class the
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @return an Flowable, that will observe all events of the @param key class
+     * @return an Flowable, that will observe all events of the @param withKey class
      */
-    public synchronized <T> Flowable<T> observeEvent(Class<T> eventClass)
+    synchronized <T> Flowable<T> observeEvent(Class<T> eventClass)
     {
         RxBusEventIsNullException.checkEvent(eventClass);
 
@@ -71,39 +63,39 @@ public class RxBus
     }
 
     /**
-     * Get an observable that observes all events that are send with the key and are of the type of the event class
+     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @param key  the event key you want to observe
-     * @return an Flowable, that will observe all events of the @param key class
+     * @param key  the event withKey you want to observe
+     * @return an Flowable, that will observe all events of the @param withKey class
      */
-    public synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, Integer key)
+    synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, Integer key)
     {
         return observeEvent(new RxQueueKey(eventClass, key));
     }
 
     /**
-     * Get an observable that observes all events that are send with the key and are of the type of the event class
+     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @param key  the event key you want to observe
-     * @return an Flowable, that will observe all events of the @param key class
+     * @param key  the event withKey you want to observe
+     * @return an Flowable, that will observe all events of the @param withKey class
      */
-    public synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, String key)
+    synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, String key)
     {
         return observeEvent(new RxQueueKey(eventClass, key));
     }
 
     /**
-     * Get an observable that observes all events that are send with the key and are of the type of the event class
+     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
      * <p>
-     * @param key  the event key you want to observe
-     * @return an Flowable, that will observe all events of the @param key class
+     * @param key  the event withKey you want to observe
+     * @return an Flowable, that will observe all events of the @param withKey class
      */
-    public synchronized <T> Flowable<T> observeEvent(RxQueueKey key)
+    synchronized <T> Flowable<T> observeEvent(RxQueueKey key)
     {
         if (key == null)
-            throw new RuntimeException("You can't use a null key");
+            throw new RuntimeException("You can't use a null withKey");
 
         Processor processor = getProcessor(key, true);
         return (Flowable)processor;
@@ -115,7 +107,7 @@ public class RxBus
 
     synchronized Processor getProcessor(Class<?> key, boolean createIfMissing)
     {
-        // 1) look if key already has a publisher processor, if so, return it
+        // 1) look if withKey already has a publisher processor, if so, return it
         if (mProcessorClasses.containsKey(key))
             return mProcessorClasses.get(key);
         // 2) else, create a new one and put it into the map
@@ -131,7 +123,7 @@ public class RxBus
 
     synchronized Processor getProcessor(RxQueueKey key, boolean createIfMissing)
     {
-        // 1) look if key already has a publisher processor, if so, return it
+        // 1) look if withKey already has a publisher processor, if so, return it
         if (mProcessorKeys.containsKey(key))
             return mProcessorKeys.get(key);
         // 2) else, create a new one and put it into the map

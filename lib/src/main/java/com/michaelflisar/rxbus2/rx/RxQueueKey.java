@@ -12,7 +12,7 @@ public class RxQueueKey<T>
     public RxQueueKey(Class<T> classOfKey, int id)
     {
         if (classOfKey == null)
-            throw new RuntimeException("You can't create a key for a null class!");
+            throw new RuntimeException("You can't create a withKey for a null class!");
 
         mClassId = classOfKey;
         mIntegerId = id;
@@ -21,9 +21,9 @@ public class RxQueueKey<T>
     public RxQueueKey(Class<T> classOfKey, String id)
     {
         if (classOfKey == null)
-            throw new RuntimeException("You can't create a key for a null class!");
+            throw new RuntimeException("You can't create a withKey for a null class!");
         if (id == null)
-            throw new RuntimeException("You can't create a null based key!");
+            throw new RuntimeException("You can't create a null based withKey!");
 
         mClassId = classOfKey;
         mStringId = id;

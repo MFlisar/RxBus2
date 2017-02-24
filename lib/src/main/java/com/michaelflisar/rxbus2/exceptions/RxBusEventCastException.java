@@ -13,6 +13,6 @@ public class RxBusEventCastException extends RuntimeException
 
     public RxBusEventCastException(Class eventClass, Class castClass)
     {
-        super(String.format("You can't cast an event of type %s to %s, because the event is not an instance of %s or a sub class of it!", eventClass, castClass, castClass));
+        super(String.format("You can't withCast an event of type %s to %s, because the event is not an instance of %s or a sub class of it!", eventClass, castClass, castClass));
     }
 }

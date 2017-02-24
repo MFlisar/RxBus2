@@ -38,12 +38,12 @@ public class RxBusBuilder<T>
 
     private Object mBoundObject = null;
 
-    static <T> RxBusBuilder<T> create(Class<T> eventClass)
+    public static <T> RxBusBuilder<T> create(Class<T> eventClass)
     {
         return new RxBusBuilder<T>(eventClass);
     }
 
-    RxBusBuilder(Class<T> eventClass)
+    private RxBusBuilder(Class<T> eventClass)
     {
         mEventClass = eventClass;
     }
@@ -209,7 +209,7 @@ public class RxBusBuilder<T>
 
         Consumer<R> actualOnNext = onNext;
         if (mQueuer != null && mQueueSubscriptionSafetyCheckEnabled)
-            actualOnNext = RxBusUtil.wrapQueueAction(onNext, mQueuer);
+            actualOnNext = RxBusUtil.wrapQueueConsumer(onNext, mQueuer);
 
         flowable = applySchedular(flowable);
         Disposable disposable = flowable.subscribe(actualOnNext, onError, onCompleted);

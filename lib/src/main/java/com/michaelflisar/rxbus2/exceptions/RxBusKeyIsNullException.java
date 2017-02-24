@@ -13,6 +13,6 @@ public class RxBusKeyIsNullException extends RuntimeException
 
     public RxBusKeyIsNullException()
     {
-        super("You can't use a null key!");
+        super("You can't use a null withKey!");
     }
 }

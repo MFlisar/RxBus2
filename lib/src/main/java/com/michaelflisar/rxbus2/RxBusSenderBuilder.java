@@ -26,22 +26,22 @@ public class RxBusSenderBuilder
      * Useful for sending many sub classes to one base class observer
      * Sending an event that is not assignable by this class will throw an exception.
      * <p>
-     * @param  cast  the class to cast the event to
+     * @param  cast  the class to withCast the event to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder cast(Class<?> cast)
+    public RxBusSenderBuilder withCast(Class<?> cast)
     {
         mCast = cast;
         return this;
     }
 
     /**
-     * Force sending an event to observers of the provided key only
+     * Force sending an event to observers of the provided withKey only
      * <p>
-     * @param  key the key this event should be broadcasted to
+     * @param  key the withKey this event should be broadcasted to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder key(Integer key)
+    public RxBusSenderBuilder withKey(Integer key)
     {
         RxBusKeyIsNullException.checkKey(key);
         mKey = key;
@@ -49,12 +49,12 @@ public class RxBusSenderBuilder
     }
 
     /**
-     * Force sending an event to observers of the provided key only
+     * Force sending an event to observers of the provided withKey only
      * <p>
-     * @param  key the key this event should be broadcasted to
+     * @param  key the withKey this event should be broadcasted to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder key(String key)
+    public RxBusSenderBuilder withKey(String key)
     {
         RxBusKeyIsNullException.checkKey(key);
         mKey = key;
@@ -62,11 +62,11 @@ public class RxBusSenderBuilder
     }
 
     /**
-     * Force sending an event the default class as well, even if a key is provider
+     * Force sending an event the default class as well, even if a withKey is provider
      * <p>
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder sendToDefaultBus()
+    public RxBusSenderBuilder withSendToDefaultBus()
     {
         mSendToDefaultBus = true;
         return this;
@@ -102,7 +102,7 @@ public class RxBusSenderBuilder
             }
         }
 
-        // 2) send to key bound bus
+        // 2) send to withKey bound bus
         if (mKey != null)
         {
             Processor processor = null;
