@@ -6,7 +6,7 @@ This is an reactive implementation of an event bus, with a few convenient functi
 
 ### What does it do?
 
-* it allows you to *sen´d events* to a bus
+* it allows you to *send events* to a bus
 * it allows you to *subscribe to special events* wherever you want
 * it allows you to *queue events* until an activity is resumed (to make sure views are accessable for example) and even to *pause and resume events* => for example, queue events while an activity is paused and emit them as soon as it get's resumed
 * it's very **lightweight**
@@ -74,11 +74,13 @@ RxBus.get()
     .withSendToDefaultBus()
     .send(new TestEvent());
 // Send an event to the bus and cast it to a specific class (a base class of multiple classes)
-// With this trick all subscribers to the base class will receive the event (and not only those who listen to the specific classes)
+// This allows you to send casted objects to the bus, so that all observers of the casted class will receive this event (of course only if the cast of the send event is possible, otherwise an exception is thrown!)
 RxBus.get()
     .withCast(TestEvent.class)
     .send(new SubTestEvent());
 ```
+
+Of course you combine those functionalities as you want!
 
 #####Advanced usage - QUEUING AND BINDING
 
