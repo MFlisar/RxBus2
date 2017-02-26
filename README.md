@@ -38,7 +38,7 @@ dependencies {
 - [Advanced usage - QUEUING AND BINDING](#advanced-usage---queuing-and-binding)
 - [Advanced usage - KEYS](#advanced-usage---keys)
 - [Advanced usage](#advanced-usage)
-- [Helper class - `RXSubscriptionManager`](#helper-class---rxsubscriptionmanager)
+- [Helper class - `RXDisposableManager`](#helper-class---rxdisposablemanager)
 
 #####Demo
 
