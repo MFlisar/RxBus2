@@ -165,7 +165,7 @@ RxBusBuilder.create(TestEvent.class)
 
 #####Helper class - `RxDisposableManager`
 
-This class helps to bind `Subscriptions` to objects and offers an easy way to unsubscribe all `Subscriptions` that are bound to an object at once. You can simply use this directly via `RxDisposableManager.addDisposable(boundObject, flowable)` or use it directly with the `RxBusBuilder` via the `RxBusBuilder.withBound(boundObject)` which will automatically add the `Disposable` to the `RxDisposableManager` as soon as you call `RxBusBuilder.subscribe(...)`. This will automatically add the subscription to the `RxDisposableManager` when you call `RxBusBuilder.subscribe(...)`. Afterwards you unsubscribe via `RxDisposableManager.unsubscribe(boundObject);`. The bound object can be an `Activity` or `Fragment` for example, but any other object as well.
+This class helps to bind `Disposables` to objects and offers an easy way to unsubscribe all `Disposables` that are bound to an object at once. You can simply use this directly via `RxDisposableManager.addDisposable(boundObject, flowable)` or use it directly with the `RxBusBuilder` via the `RxBusBuilder.withBound(boundObject)` which will automatically add the `Disposable` to the `RxDisposableManager` as soon as you call `RxBusBuilder.subscribe(...)`. This will automatically add the `Disposable` to the `RxDisposableManager` when you call `RxBusBuilder.subscribe(...)`. Afterwards you unsubscribe via `RxDisposableManager.unsubscribe(boundObject);`. The bound object can be an `Activity` or `Fragment` for example, but any other object as well.
 
 *Example - Direct usage*
 
