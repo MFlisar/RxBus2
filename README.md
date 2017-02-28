@@ -1,4 +1,4 @@
-###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2)
+###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxBus2-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5358)
 
 ![RxBus2 - Reactive Event Bus](https://github.com/MFlisar/RxBus2/blob/master/logo/logo.png "RxBus2")
 
