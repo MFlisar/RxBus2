@@ -76,7 +76,9 @@ RxBus.get()
     .withSendToDefaultBus()
     .send(new TestEvent());
 // Send an event to the bus and cast it to a specific class (a base class of multiple classes)
-// This allows you to send casted objects to the bus, so that all observers of the casted class will receive this event (of course only if the cast of the send event is possible, otherwise an exception is thrown!)
+// This allows you to send casted objects to the bus
+// so that all observers of the casted class will receive this event 
+// (of course only if the cast of the send event is possible, otherwise an exception is thrown!)
 RxBus.get()
     .withCast(TestEvent.class)
     .send(new SubTestEvent());
