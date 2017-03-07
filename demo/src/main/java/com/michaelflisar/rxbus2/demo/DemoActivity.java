@@ -323,7 +323,7 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<TestEvent.TestSubEvent4>() {
                     @Override
                     public void accept(TestEvent.TestSubEvent4 s) {
-                        logEvent("TEST - SUBCLASS4 and QUEUED - " + TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
+                        logEvent("TEST - SUBCLASS4 and QUEUED - " + s.getClass().getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
                     }
                 });
 
