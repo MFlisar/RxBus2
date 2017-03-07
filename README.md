@@ -1,4 +1,4 @@
-###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2)
+###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxBus2-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5358)
 
 ![RxBus2 - Reactive Event Bus](https://github.com/MFlisar/RxBus2/blob/master/logo/logo.png "RxBus2")
 
@@ -38,7 +38,7 @@ dependencies {
 - [Advanced usage - QUEUING AND BINDING](#advanced-usage---queuing-and-binding)
 - [Advanced usage - KEYS](#advanced-usage---keys)
 - [Advanced usage](#advanced-usage)
-- [Helper class - `RXDisposableManager`](#helper-class---rxdisposablemanager)
+- [Helper class - `RxDisposableManager`](#helper-class---rxdisposablemanager)
 
 #####Demo
 
@@ -76,7 +76,9 @@ RxBus.get()
     .withSendToDefaultBus()
     .send(new TestEvent());
 // Send an event to the bus and cast it to a specific class (a base class of multiple classes)
-// This allows you to send casted objects to the bus, so that all observers of the casted class will receive this event (of course only if the cast of the send event is possible, otherwise an exception is thrown!)
+// This allows you to send casted objects to the bus
+// so that all observers of the casted class will receive this event 
+// (of course only if the cast of the send event is possible, otherwise an exception is thrown!)
 RxBus.get()
     .withCast(TestEvent.class)
     .send(new SubTestEvent());
