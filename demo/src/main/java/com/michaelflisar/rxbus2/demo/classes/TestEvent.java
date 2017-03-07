@@ -6,6 +6,21 @@ package com.michaelflisar.rxbus2.demo.classes;
 
 public class TestEvent
 {
+    private String mText = null;
+
+    public TestEvent withText(String text)
+    {
+        mText = text;
+        return this;
+    }
+
+    public String toString()
+    {
+        if (mText != null)
+            return this.getClass().getSimpleName() + " - " + mText;
+        return this.getClass().getSimpleName();
+    }
+
     public static class TestSubEvent1 extends TestEvent
     {
 

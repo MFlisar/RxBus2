@@ -71,6 +71,10 @@ public class DemoActivity extends PauseAwareActivity
                     .send(getLogMessage("onCreate", "KEY 2 (AND ALL String listeners) main thread i=" + i));
         }
 
+        // -----------------
+        // Send some advanced events
+        // -----------------
+
         // lets send some TestEvent and sub class events and check, if the listener of TestEvent receives the sub classes as well
         // => we achieve that via the cast operator!
         // without the cast operator, only concrete class observers will receive the event!
@@ -81,10 +85,43 @@ public class DemoActivity extends PauseAwareActivity
         RxBus.get()
                 .withCast(TestEvent.class)
                 .send(new TestEvent.TestSubEvent2());
+        // alternatively we can do following, this will send the event to all super class observers as well
+        // and this setting can be enabled by default via RxBusDefauls.get().setSendToSuperClassesAsWell(true) if desired
+        RxBus.get()
+                .withSendToSuperClasses(true)
+                .send(new TestEvent.TestSubEvent3());
 
         // this event won't be received by anyone
         RxBus.get()
                 .send(new TestEvent.TestSubEvent3());
+
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+
+                RxBus.get().send(new TestEvent().withText("from thread"));
+                RxBus.get()
+                        .withCast(TestEvent.class)
+                        .send(new TestEvent.TestSubEvent1().withText("from thread"));
+                RxBus.get()
+                        .withCast(TestEvent.class)
+                        .send(new TestEvent.TestSubEvent2().withText("from thread"));
+
+                RxBus.get()
+                        .withSendToSuperClasses(true)
+                        .send(new TestEvent.TestSubEvent3().withText("from thread"));
+            }
+        }).start();
     }
 
     @Override
@@ -268,7 +305,7 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<TestEvent>() {
                     @Override
                     public void accept(TestEvent s) {
-                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.getClass().getSimpleName() + "]");
+                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
                     }
                 });
     }
