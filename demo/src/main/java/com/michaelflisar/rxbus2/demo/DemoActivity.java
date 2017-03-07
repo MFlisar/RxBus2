@@ -95,6 +95,9 @@ public class DemoActivity extends PauseAwareActivity
         RxBus.get()
                 .send(new TestEvent.TestSubEvent3());
 
+        RxBus.get()
+                .send(new TestEvent.TestSubEvent4());
+
         new Thread(new Runnable()
         {
             @Override
@@ -120,6 +123,9 @@ public class DemoActivity extends PauseAwareActivity
                 RxBus.get()
                         .withSendToSuperClasses(true)
                         .send(new TestEvent.TestSubEvent3().withText("from thread"));
+
+                RxBus.get()
+                        .send(new TestEvent.TestSubEvent4().withText("from thread"));
             }
         }).start();
     }
@@ -297,7 +303,7 @@ public class DemoActivity extends PauseAwareActivity
 
     private void testAdvancedWithCast()
     {
-        // subscribe to a TestEvent event
+        // subscribe to TestEvent event
         RxBusBuilder.create(TestEvent.class)
                 .withQueuing(this)
                 .withBound(this)
@@ -305,6 +311,18 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<TestEvent>() {
                     @Override
                     public void accept(TestEvent s) {
+                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
+                    }
+                });
+
+        // explicitly subscribe to TestEvent.TestSubEvent1 event only
+        RxBusBuilder.create(TestEvent.TestSubEvent4.class)
+                .withQueuing(this)
+                .withBound(this)
+                .withMode(RxBusMode.Main)
+                .subscribe(new Consumer<TestEvent.TestSubEvent4>() {
+                    @Override
+                    public void accept(TestEvent.TestSubEvent4 s) {
                         logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
                     }
                 });
