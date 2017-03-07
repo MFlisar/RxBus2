@@ -97,7 +97,7 @@ public class RxBusBuilder<T>
         {
             mKeys = new ArrayList<>();
             for (int i = 0; i < key.length; i++)
-                mKeys.add( new RxQueueKey(mEventClass, key[i]));
+                mKeys.add( new RxQueueKey(mEventClass).withId(key[i]));
         }
         else
             mKeys = null;
@@ -110,7 +110,7 @@ public class RxBusBuilder<T>
         {
             mKeys = new ArrayList<>();
             for (int i = 0; i < key.length; i++)
-                mKeys.add( new RxQueueKey(mEventClass, key[i]));
+                mKeys.add( new RxQueueKey(mEventClass).withId(key[i]));
         }
         else
             mKeys = null;
@@ -152,7 +152,7 @@ public class RxBusBuilder<T>
             flowable = flowable.onBackpressureBuffer();
 
         if (mQueuer != null)
-            flowable = flowable.compose(FlowableTransformers.<T>valve(mQueuer.getResumeObservable(), mQueuer.isBusResumed(), mValvePrefetch));
+            flowable = flowable.compose(FlowableTransformers.valve(mQueuer.getResumeObservable(), mQueuer.isBusResumed(), mValvePrefetch));
         if (applySchedular)
             flowable = applySchedular(flowable);
         return flowable;

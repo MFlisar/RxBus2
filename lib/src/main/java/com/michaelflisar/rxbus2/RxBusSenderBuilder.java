@@ -16,6 +16,7 @@ public class RxBusSenderBuilder
     private Class<?> mCast = null;
     private Object mKey = null;
     private boolean mSendToDefaultBus = false;
+//    private boolean mSuperClasses = false;
 
     RxBusSenderBuilder()
     {
@@ -36,9 +37,9 @@ public class RxBusSenderBuilder
     }
 
     /**
-     * Force sending an event to observers of the provided withKey only
+     * Force sending an event to observers of the provided key only
      * <p>
-     * @param  key the withKey this event should be broadcasted to
+     * @param  key the key this event should be broadcasted to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
     public RxBusSenderBuilder withKey(Integer key)
@@ -49,12 +50,12 @@ public class RxBusSenderBuilder
     }
 
     /**
-     * Force sending an event to observers of the provided withKey only
+     * Force sending an event to observers of the provided key only
      * <p>
-     * @param  key the withKey this event should be broadcasted to
+     * @param  key the key this event should be broadcasted to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder withKey(String key)
+    public RxBusSenderBuilder key(String key)
     {
         RxBusKeyIsNullException.checkKey(key);
         mKey = key;
@@ -62,7 +63,7 @@ public class RxBusSenderBuilder
     }
 
     /**
-     * Force sending an event the default class as well, even if a withKey is provider
+     * Force sending an event the default class as well, even if a key is provider
      * <p>
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
@@ -71,6 +72,17 @@ public class RxBusSenderBuilder
         mSendToDefaultBus = true;
         return this;
     }
+
+    /**
+     * Force sending an event the all super class observers as well
+     * <p>
+     * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
+     */
+//    public RxBusSenderBuilder withSuperClasses()
+//    {
+//        mSuperClasses = true;
+//        return this;
+//    }
 
     /**
      * Send an event to the bus, applying all already chained settings
@@ -86,43 +98,75 @@ public class RxBusSenderBuilder
 
         boolean send = false;
 
+        RxQueueKey key = new RxQueueKey(mCast == null ? event.getClass() : mCast);
+
         // 1) send to simple unbound bus
         if (mKey == null || mSendToDefaultBus)
-        {
-            Processor processor = RxBus.getInstance().getProcessor(mCast == null ? event.getClass() : mCast, false);
+            send |= sendToUnboundBus(key, event);
 
-            // only send event, if processor exists => this means someone has at least once subscribed to it
-            if (processor != null)
-            {
-                if (mCast == null)
-                    processor.onNext(event);
-                else
-                    processor.onNext(mCast.cast(event));
-                send = true;
-            }
-        }
-
-        // 2) send to withKey bound bus
+        // 2) send to key bound bus
         if (mKey != null)
+            send |= sendToKeyBoundBus(key, event);
+
+        // ---------
+        // TEST
+        // ---------
+
+        // 3) send to unbound base class buses
+        // 4) send to key bound bus of super classes
+        if (false)//mSuperClasses)
         {
-            Processor processor = null;
-
-            if (mKey instanceof String)
-                processor = RxBus.getInstance().getProcessor(new RxQueueKey(mCast == null ? event.getClass() : mCast, (String)mKey), false);
-            else if (mKey instanceof Integer)
-                processor = RxBus.getInstance().getProcessor(new RxQueueKey(mCast == null ? event.getClass() : mCast, (Integer)mKey), false);
-
-            // only send event, if processor exists => this means someone has at least once subscribed to it
-            if (processor != null)
+            key = key.getParentKey();
+            while (key != null)
             {
-                if (mCast == null)
-                    processor.onNext(event);
-                else
-                    processor.onNext(mCast.cast(event));
-                send = true;
+                send |= sendToUnboundBus(key, event);
+                if (mKey != null)
+                    send |= sendToKeyBoundBus(key, event);
+                key = key.getParentKey();
             }
         }
 
         return send;
     }
+
+    private boolean sendToUnboundBus(RxQueueKey key, Object event)
+    {
+        boolean send = false;
+        Processor processor = RxBus.getInstance().getProcessor(key, false);
+        // only send event, if processor exists => this means someone has at least once subscribed to it
+        if (processor != null)
+        {
+            if (mCast == null)
+                processor.onNext(event);
+            else
+                processor.onNext(mCast.cast(event));
+            send = true;
+        }
+        return send;
+    }
+
+    private boolean sendToKeyBoundBus(RxQueueKey key, Object event)
+    {
+        RxQueueKey keyToUse = key.clone();
+        boolean send = false;
+        Processor processor;
+        if (mKey instanceof String)
+            keyToUse.withId((String)mKey);
+        else if (mKey instanceof Integer)
+            keyToUse.withId((Integer)mKey);
+        processor = RxBus.getInstance().getProcessor(keyToUse, false);
+
+        // only send event, if processor exists => this means someone has at least once subscribed to it
+        if (processor != null)
+        {
+            if (mCast == null)
+                processor.onNext(event);
+            else
+                processor.onNext(mCast.cast(event));
+            send = true;
+        }
+        return send;
+    }
+
+
 }

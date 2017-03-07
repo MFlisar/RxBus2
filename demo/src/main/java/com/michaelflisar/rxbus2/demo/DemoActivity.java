@@ -9,8 +9,6 @@ import com.michaelflisar.rxbus2.demo.classes.TestEvent;
 import com.michaelflisar.rxbus2.rx.RxBusMode;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
 
-import org.reactivestreams.Subscription;
-
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.disposables.Disposable;
@@ -57,9 +55,9 @@ public class DemoActivity extends PauseAwareActivity
             }
         }).start();
 
-        // lets send some events bound to a withKey (can be a string or an integer)
-        // 1 loop: sends events to the given withKey ONLY
-        // 2 loop: sends events to all observers of the withKey AND to all simple String event observer
+        // lets send some events bound to a key (can be a string or an integer)
+        // 1 loop: sends events to the given key ONLY
+        // 2 loop: sends events to all observers of the key AND to all simple String event observer
         for (int i = 0; i < 5; i++)
         {
             RxBus.get()
@@ -75,7 +73,7 @@ public class DemoActivity extends PauseAwareActivity
 
         // lets send some TestEvent and sub class events and check, if the listener of TestEvent receives the sub classes as well
         // => we achieve that via the cast operator!
-        // without the cast operator, only concrete class bs observers will receive the event!
+        // without the cast operator, only concrete class observers will receive the event!
         RxBus.get().send(new TestEvent());
         RxBus.get()
                 .withCast(TestEvent.class)
@@ -83,6 +81,10 @@ public class DemoActivity extends PauseAwareActivity
         RxBus.get()
                 .withCast(TestEvent.class)
                 .send(new TestEvent.TestSubEvent2());
+
+        // this event won't be received by anyone
+        RxBus.get()
+                .send(new TestEvent.TestSubEvent3());
     }
 
     @Override
@@ -90,7 +92,7 @@ public class DemoActivity extends PauseAwareActivity
     {
         RxBus.get().send(getLogMessage("onPause", "BEFORE on pause"));
         Log.d(TAG, "ACTIVITY BEFORE PAUSED");
-        super.onResume();
+        super.onPause();
         Log.d(TAG, "ACTIVITY AFTER PAUSED");
         RxBus.get().send(getLogMessage("onPause", "AFTER on pause"));
     }
@@ -125,7 +127,7 @@ public class DemoActivity extends PauseAwareActivity
 
     private void logEvent(String event, boolean queuedBus, String key, String extra)
     {
-        Log.d(TAG, String.format("Type: %s%s (withKey=%s), Event: %s", queuedBus ? "QUEUED BUS" : "SIMPLE BUS", extra != null ? extra : "", key == null ? "NONE" : key, event));
+        Log.d(TAG, String.format("Type: %s%s (key=%s), Event: %s", queuedBus ? "QUEUED BUS" : "SIMPLE BUS", extra != null ? extra : "", key == null ? "NONE" : key, event));
     }
 
     // -----------------------------
@@ -173,7 +175,7 @@ public class DemoActivity extends PauseAwareActivity
     {
         // you can use everything that is shown in testGeneral here as well, example will not show all possible combinations!
 
-        // 1) Subscribe to a string event and only listen to a special withKey (+ queuing is enabled as well)
+        // 1) Subscribe to a string event and only listen to a special key (+ queuing is enabled as well)
         // Disposable is managed automatically as well by RxDisposableManager
         RxBusBuilder.create(String.class)
                 // all optional!!!
@@ -218,7 +220,7 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer s) {
-                        logEvent(s.toString(), true, "custom_event_id_1", " [TRANSFORMED to HASH]");
+                        logEvent("Hash value: " + s.toString(), true, "custom_event_id_1", " [TRANSFORMED to HASH]");
                     }
                 }, new FlowableTransformer<String, Integer>() {
                     @Override

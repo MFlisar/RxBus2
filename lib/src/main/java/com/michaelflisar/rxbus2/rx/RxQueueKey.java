@@ -9,24 +9,40 @@ public class RxQueueKey<T>
     private Integer mIntegerId = null;
     private String mStringId = null;
 
-    public RxQueueKey(Class<T> classOfKey, int id)
+    public RxQueueKey(Class<T> classOfKey)
     {
         if (classOfKey == null)
-            throw new RuntimeException("You can't create a withKey for a null class!");
+            throw new RuntimeException("You can't create a key for a null class!");
 
         mClassId = classOfKey;
-        mIntegerId = id;
     }
 
-    public RxQueueKey(Class<T> classOfKey, String id)
+    public RxQueueKey<T> withId(Integer id)
     {
-        if (classOfKey == null)
-            throw new RuntimeException("You can't create a withKey for a null class!");
-        if (id == null)
-            throw new RuntimeException("You can't create a null based withKey!");
+        mIntegerId = id;
+        return this;
+    }
 
-        mClassId = classOfKey;
+    public RxQueueKey<T> withId(String id)
+    {
         mStringId = id;
+        return this;
+    }
+
+    public RxQueueKey getParentKey()
+    {
+        if (mClassId.getSuperclass() == null)
+            return null;
+        return new RxQueueKey(mClassId.getSuperclass())
+                .withId(mIntegerId)
+                .withId(mStringId);
+    }
+
+    public RxQueueKey clone()
+    {
+        return new RxQueueKey(mClassId)
+                .withId(mIntegerId)
+                .withId(mStringId);
     }
 
     // ---------------------

@@ -15,4 +15,14 @@ public class TestEvent
     {
 
     }
+
+    public static class TestSubEvent3 extends TestEvent
+    {
+
+    }
+
+    public static class TestSubEvent4 extends TestEvent
+    {
+
+    }
 }

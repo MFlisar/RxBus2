@@ -28,8 +28,6 @@ public class RxBus
         return INSTANCE;
     }
 
-    // for better speed, we use different maps => no wrapper withKey generation needed if you just want to use a default class based bus
-    private HashMap<Class<?>, Processor> mProcessorClasses = new HashMap<>();
     private HashMap<RxQueueKey, Processor> mProcessorKeys = new HashMap<>();
 
     // ---------------------------
@@ -58,7 +56,7 @@ public class RxBus
     {
         RxBusEventIsNullException.checkEvent(eventClass);
 
-        Processor processor = getProcessor(eventClass, true);
+        Processor processor = getProcessor(new RxQueueKey(eventClass), true);
         return (Flowable)processor;
     }
 
@@ -71,7 +69,7 @@ public class RxBus
      */
     synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, Integer key)
     {
-        return observeEvent(new RxQueueKey(eventClass, key));
+        return observeEvent(new RxQueueKey(eventClass).withId(key));
     }
 
     /**
@@ -83,7 +81,7 @@ public class RxBus
      */
     synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, String key)
     {
-        return observeEvent(new RxQueueKey(eventClass, key));
+        return observeEvent(new RxQueueKey(eventClass).withId(key));
     }
 
     /**
@@ -104,22 +102,6 @@ public class RxBus
     // ---------------------------
     // private helper functions
     // ---------------------------
-
-    synchronized Processor getProcessor(Class<?> key, boolean createIfMissing)
-    {
-        // 1) look if withKey already has a publisher processor, if so, return it
-        if (mProcessorClasses.containsKey(key))
-            return mProcessorClasses.get(key);
-        // 2) else, create a new one and put it into the map
-        else if (createIfMissing)
-        {
-            Processor processor = PublishProcessor.create().toSerialized();
-            mProcessorClasses.put(key, processor);
-            return processor;
-        }
-        else
-            return null;
-    }
 
     synchronized Processor getProcessor(RxQueueKey key, boolean createIfMissing)
     {
