@@ -38,7 +38,7 @@ dependencies {
 - [Advanced usage - QUEUING AND BINDING](#advanced-usage---queuing-and-binding)
 - [Advanced usage - KEYS](#advanced-usage---keys)
 - [Advanced usage](#advanced-usage)
-- [Helper class - `RXDisposableManager`](#helper-class---rxdisposablemanager)
+- [Helper class - `RxDisposableManager`](#helper-class---rxdisposablemanager)
 
 #####Demo
 
