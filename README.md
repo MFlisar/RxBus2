@@ -168,6 +168,13 @@ RxBusBuilder.create(TestEvent.class)
 
 #####Advanced usage - Sub Classes
 
+By default, sub class handling is disabled and you must use `RxBus.withCast(BaseClass.class)` to send sub classes to base class observers. You have two other options for handling this.
+
+* Use `RxBus.get().withSendToSuperClasses(true).send(subClassEvent)` - this will send the event to all super class observers of the send event as well
+* Enable above by default via `RxBusDefaults.get().setSendToSuperClassesAsWell(true)` then all events that are send via `RxBus.get().sendEvent(subClassEvent)` are send to all super classes of the send event as well
+
+If you enable `RxBusDefaults.get().setSendToSuperClassesAsWell(true)`, you can still overwrite this global default value for a single event by sending the event via `RxBus.get().withSendToSuperClasses(false).send(subClassEvent)` o a per event base.
+
 #####Helper class - `RxDisposableManager`
 
 This class helps to bind `Disposables` to objects and offers an easy way to unsubscribe all `Disposables` that are bound to an object at once. You can simply use this directly via `RxDisposableManager.addDisposable(boundObject, flowable)` or use it directly with the `RxBusBuilder` via the `RxBusBuilder.withBound(boundObject)` which will automatically add the `Disposable` to the `RxDisposableManager` as soon as you call `RxBusBuilder.subscribe(...)`. This will automatically add the `Disposable` to the `RxDisposableManager` when you call `RxBusBuilder.subscribe(...)`. Afterwards you unsubscribe via `RxDisposableManager.unsubscribe(boundObject);`. The bound object can be an `Activity` or `Fragment` for example, but any other object as well.
