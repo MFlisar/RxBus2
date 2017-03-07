@@ -37,7 +37,8 @@ dependencies {
 - [Sending an event](#sending-an-event)
 - [Advanced usage - QUEUING AND BINDING](#advanced-usage---queuing-and-binding)
 - [Advanced usage - KEYS](#advanced-usage---keys)
-- [Advanced usage](#advanced-usage)
+- [Advanced usage - TRANSFORM](#advanced-usage---transform)
+- [Advanced usage - SUB CLASSES](#advanced-usage---sub-classes)
 - [Helper class - `RxDisposableManager`](#helper-class---rxdisposablemanager)
 
 #####Demo
@@ -138,7 +139,7 @@ RxBusBuilder.create(TestEvent.class)
     });
 ```
 
-#####Advanced usage
+#####Advanced usage - Transfrom
 
 You can pass in a `FlowableTransformer` to transform the observed event to whatever you want!
 
@@ -164,6 +165,15 @@ RxBusBuilder.create(TestEvent.class)
         }
     }, transformer);
 ```
+
+#####Advanced usage - Sub Classes
+
+By default, sub class handling is disabled and you must use `RxBus.withCast(BaseClass.class)` to send sub classes to base class observers (and *only* to the base class observers). You have two other options for handling this.
+
+* Use `RxBus.get().withSendToSuperClasses(true).send(subClassEvent)` - this will send the event to all super class observers of the send event as well
+* Enable above by default via `RxBusDefaults.get().setSendToSuperClassesAsWell(true)` then all events that are send via `RxBus.get().sendEvent(subClassEvent)` are send to all super classes of the send event as well
+
+If you enable `RxBusDefaults.get().setSendToSuperClassesAsWell(true)`, you can still overwrite this global default value for a single event by sending the event via `RxBus.get().withSendToSuperClasses(false).send(subClassEvent)` o a per event base.
 
 #####Helper class - `RxDisposableManager`
 
