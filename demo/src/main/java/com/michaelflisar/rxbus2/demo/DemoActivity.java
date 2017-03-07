@@ -311,7 +311,7 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<TestEvent>() {
                     @Override
                     public void accept(TestEvent s) {
-                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
+                        logEvent("TEST - BASE CLASS and QUEUED - " + TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
                     }
                 });
 
@@ -323,7 +323,18 @@ public class DemoActivity extends PauseAwareActivity
                 .subscribe(new Consumer<TestEvent.TestSubEvent4>() {
                     @Override
                     public void accept(TestEvent.TestSubEvent4 s) {
-                        logEvent(TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
+                        logEvent("TEST - SUBCLASS4 and QUEUED - " + TestEvent.class.getSimpleName(), true, null, " [ActualClass: " + s.toString() + "]");
+                    }
+                });
+
+        // subscribe to TestEvent event - NO queuing
+        RxBusBuilder.create(TestEvent.class)
+                .withBound(this)
+                .withMode(RxBusMode.Main)
+                .subscribe(new Consumer<TestEvent>() {
+                    @Override
+                    public void accept(TestEvent s) {
+                        logEvent("TEST - BASE CLASS and not queued - " + TestEvent.class.getSimpleName(), false, null, " [ActualClass: " + s.toString() + "]");
                     }
                 });
     }
