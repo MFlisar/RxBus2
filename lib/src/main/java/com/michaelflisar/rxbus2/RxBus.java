@@ -50,7 +50,7 @@ public class RxBus
      * Get an observable that observes all events of the the class the
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @return an Flowable, that will observe all events of the @param withKey class
+     * @return an Flowable, that will observe all events of the @param key class
      */
     synchronized <T> Flowable<T> observeEvent(Class<T> eventClass)
     {
@@ -61,11 +61,11 @@ public class RxBus
     }
 
     /**
-     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
+     * Get an observable that observes all events that are send with the key and are of the type of the event class
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @param key  the event withKey you want to observe
-     * @return an Flowable, that will observe all events of the @param withKey class
+     * @param key  the event key you want to observe
+     * @return an Flowable, that will observe all events of the @param key class
      */
     synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, Integer key)
     {
@@ -73,11 +73,11 @@ public class RxBus
     }
 
     /**
-     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
+     * Get an observable that observes all events that are send with the key and are of the type of the event class
      * <p>
      * @param eventClass  the class of event you want to observe
-     * @param key  the event withKey you want to observe
-     * @return an Flowable, that will observe all events of the @param withKey class
+     * @param key  the event key you want to observe
+     * @return an Flowable, that will observe all events of the @param key class
      */
     synchronized <T> Flowable<T> observeEvent(Class<T> eventClass, String key)
     {
@@ -85,15 +85,15 @@ public class RxBus
     }
 
     /**
-     * Get an observable that observes all events that are send with the withKey and are of the type of the event class
+     * Get an observable that observes all events that are send with the key and are of the type of the event class
      * <p>
-     * @param key  the event withKey you want to observe
-     * @return an Flowable, that will observe all events of the @param withKey class
+     * @param key  the event key you want to observe
+     * @return an Flowable, that will observe all events of the @param key class
      */
     synchronized <T> Flowable<T> observeEvent(RxQueueKey key)
     {
         if (key == null)
-            throw new RuntimeException("You can't use a null withKey");
+            throw new RuntimeException("You can't use a null key");
 
         Processor processor = getProcessor(key, true);
         return (Flowable)processor;
@@ -105,7 +105,7 @@ public class RxBus
 
     synchronized Processor getProcessor(RxQueueKey key, boolean createIfMissing)
     {
-        // 1) look if withKey already has a publisher processor, if so, return it
+        // 1) look if key already has a publisher processor, if so, return it
         if (mProcessorKeys.containsKey(key))
             return mProcessorKeys.get(key);
         // 2) else, create a new one and put it into the map

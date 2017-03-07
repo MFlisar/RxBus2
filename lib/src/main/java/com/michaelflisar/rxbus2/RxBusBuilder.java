@@ -79,7 +79,7 @@ public class RxBusBuilder<T>
         return this;
     }
 
-    public RxBusBuilder<T> withKeys(RxQueueKey<T>... key)
+    public RxBusBuilder<T> withKey(RxQueueKey<T>... key)
     {
         if (key.length > 0)
         {
@@ -91,6 +91,7 @@ public class RxBusBuilder<T>
             mKeys = null;
         return this;
     }
+
     public RxBusBuilder<T> withKey(int... key)
     {
         if (key.length > 0)

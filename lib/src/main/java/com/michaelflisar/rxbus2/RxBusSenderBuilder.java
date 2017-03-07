@@ -16,10 +16,11 @@ public class RxBusSenderBuilder
     private Class<?> mCast = null;
     private Object mKey = null;
     private boolean mSendToDefaultBus = false;
-//    private boolean mSuperClasses = false;
+    private boolean mSendToSuperClasses;
 
     RxBusSenderBuilder()
     {
+        mSendToSuperClasses = RxBusDefaults.get().isSendToSuperClassesAsWell();
     }
 
     /**
@@ -55,7 +56,7 @@ public class RxBusSenderBuilder
      * @param  key the key this event should be broadcasted to
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-    public RxBusSenderBuilder key(String key)
+    public RxBusSenderBuilder withKey(String key)
     {
         RxBusKeyIsNullException.checkKey(key);
         mKey = key;
@@ -76,13 +77,14 @@ public class RxBusSenderBuilder
     /**
      * Force sending an event the all super class observers as well
      * <p>
+     * @param enabled true, if this feature should be enabled, false otherwise
      * @return an {@link RxBusSenderBuilder} for chaining additional calls before calling {@link RxBusSenderBuilder#send(Object)}
      */
-//    public RxBusSenderBuilder withSuperClasses()
-//    {
-//        mSuperClasses = true;
-//        return this;
-//    }
+    public RxBusSenderBuilder withSendToSuperClasses(boolean enabled)
+    {
+        mSendToSuperClasses = enabled;
+        return this;
+    }
 
     /**
      * Send an event to the bus, applying all already chained settings
@@ -114,7 +116,7 @@ public class RxBusSenderBuilder
 
         // 3) send to unbound base class buses
         // 4) send to key bound bus of super classes
-        if (false)//mSuperClasses)
+        if (mSendToSuperClasses)
         {
             key = key.getParentKey();
             while (key != null)
