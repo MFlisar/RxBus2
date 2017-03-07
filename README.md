@@ -37,7 +37,8 @@ dependencies {
 - [Sending an event](#sending-an-event)
 - [Advanced usage - QUEUING AND BINDING](#advanced-usage---queuing-and-binding)
 - [Advanced usage - KEYS](#advanced-usage---keys)
-- [Advanced usage](#advanced-usage)
+- [Advanced usage - TRANSFORM](#advanced-usage---transform)
+- [Advanced usage - SUB CLASSES](#advanced-usage---sub-classes)
 - [Helper class - `RxDisposableManager`](#helper-class---rxdisposablemanager)
 
 #####Demo
@@ -138,7 +139,7 @@ RxBusBuilder.create(TestEvent.class)
     });
 ```
 
-#####Advanced usage
+#####Advanced usage - Transfrom
 
 You can pass in a `FlowableTransformer` to transform the observed event to whatever you want!
 
@@ -164,6 +165,8 @@ RxBusBuilder.create(TestEvent.class)
         }
     }, transformer);
 ```
+
+#####Advanced usage - Sub Classes
 
 #####Helper class - `RxDisposableManager`
 
