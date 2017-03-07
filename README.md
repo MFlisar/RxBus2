@@ -168,7 +168,7 @@ RxBusBuilder.create(TestEvent.class)
 
 #####Advanced usage - Sub Classes
 
-By default, sub class handling is disabled and you must use `RxBus.withCast(BaseClass.class)` to send sub classes to base class observers. You have two other options for handling this.
+By default, sub class handling is disabled and you must use `RxBus.withCast(BaseClass.class)` to send sub classes to base class observers (and *only* to the base class observers). You have two other options for handling this.
 
 * Use `RxBus.get().withSendToSuperClasses(true).send(subClassEvent)` - this will send the event to all super class observers of the send event as well
 * Enable above by default via `RxBusDefaults.get().setSendToSuperClassesAsWell(true)` then all events that are send via `RxBus.get().sendEvent(subClassEvent)` are send to all super classes of the send event as well
