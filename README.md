@@ -4,7 +4,7 @@
 
 This is an reactive implementation of an event bus, with a few convenient functions especially useful for handling events with activities, fragments and similar.
 
-#####RxJava V1: If you are looking for a version for RxJava V1, check out my [RXBus](https://github.com/MFlisar/RXBus)
+##### RxJava V1: If you are looking for a version for RxJava V1, check out my [RXBus](https://github.com/MFlisar/RXBus)
 
 ### What does it do?
 
