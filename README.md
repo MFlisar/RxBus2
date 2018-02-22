@@ -1,10 +1,10 @@
-###RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxBus2-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5358)
+### RxBus2 [![Release](https://jitpack.io/v/MFlisar/RxBus2.svg)](https://jitpack.io/#MFlisar/RxBus2) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RxBus2-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/5358)
 
 ![RxBus2 - Reactive Event Bus](https://github.com/MFlisar/RxBus2/blob/master/logo/logo.png "RxBus2")
 
 This is an reactive implementation of an event bus, with a few convenient functions especially useful for handling events with activities, fragments and similar.
 
-#####RxJava V1: If you are looking for a version for RxJava V1, check out my [RXBus](https://github.com/MFlisar/RXBus)
+##### RxJava V1: If you are looking for a version for RxJava V1, check out my [RXBus](https://github.com/MFlisar/RXBus)
 
 ### What does it do?
 
@@ -41,11 +41,11 @@ dependencies {
 - [Advanced usage - SUB CLASSES](#advanced-usage---sub-classes)
 - [Helper class - `RxDisposableManager`](#helper-class---rxdisposablemanager)
 
-#####Demo
+##### Demo
 
 Just check out the [DemoActivity](https://github.com/MFlisar/RxBus2/blob/master/demo/src/main/java/com/michaelflisar/rxbus2/demo/DemoActivity.java), it will show the base usage and the difference between the default and the queued `RxBus`
 
-#####Simple usage
+##### Simple usage
 
 Use the `RxBusBuilder` to create `Subscriptions` or simple `Flowables`. Just like following:
 ```java
@@ -62,7 +62,7 @@ Disposable simpleDisposable = RxBusBuilder.create(TestEvent.class)
     });
 ```
 
-#####Sending an event
+##### Sending an event
 
 ```java
 // Send an event to the bus - all observers that observe this class WITHOUT a key will receive this event
@@ -87,7 +87,7 @@ RxBus.get()
 
 Of course you combine those functionalities as you want!
 
-#####Advanced usage - QUEUING AND BINDING
+##### Advanced usage - QUEUING AND BINDING
 
 You can use this library to subscribe to events and only get them when your activity is resumed, so that you can be sure views are available. Or you can just pause and resume the bus based on any logic you want. Just like following:
 ```java
@@ -121,7 +121,7 @@ RxBusBuilder.create(TestEvent.class)
 RxDisposableManager.unsubscribe(boundObject);
 ```
 
-#####Advanced usage - KEYS
+##### Advanced usage - KEYS
 
 You can use this library to subscribe to events of a typ and ONLY get them when it was send to the bus with a special key (and and additionally only when your activity is resumed, as this example shows via `.withQueuing()`), so that you can distinct event subscriptions of the same class based on a key (the key can be an `Integer` or a `String`). Just like following:
 
@@ -139,7 +139,7 @@ RxBusBuilder.create(TestEvent.class)
     });
 ```
 
-#####Advanced usage - Transfrom
+##### Advanced usage - Transfrom
 
 You can pass in a `FlowableTransformer` to transform the observed event to whatever you want!
 
@@ -166,7 +166,7 @@ RxBusBuilder.create(TestEvent.class)
     }, transformer);
 ```
 
-#####Advanced usage - Sub Classes
+##### Advanced usage - Sub Classes
 
 By default, sub class handling is disabled and you must use `RxBus.withCast(BaseClass.class)` to send sub classes to base class observers (and *only* to the base class observers). You have two other options for handling this.
 
@@ -175,7 +175,7 @@ By default, sub class handling is disabled and you must use `RxBus.withCast(Base
 
 If you enable `RxBusDefaults.get().setSendToSuperClassesAsWell(true)`, you can still overwrite this global default value for a single event by sending the event via `RxBus.get().withSendToSuperClasses(false).send(subClassEvent)` o a per event base.
 
-#####Helper class - `RxDisposableManager`
+##### Helper class - `RxDisposableManager`
 
 This class helps to bind `Disposables` to objects and offers an easy way to unsubscribe all `Disposables` that are bound to an object at once. You can simply use this directly via `RxDisposableManager.addDisposable(boundObject, flowable)` or use it directly with the `RxBusBuilder` via the `RxBusBuilder.withBound(boundObject)` which will automatically add the `Disposable` to the `RxDisposableManager` as soon as you call `RxBusBuilder.subscribe(...)`. This will automatically add the `Disposable` to the `RxDisposableManager` when you call `RxBusBuilder.subscribe(...)`. Afterwards you unsubscribe via `RxDisposableManager.unsubscribe(boundObject);`. The bound object can be an `Activity` or `Fragment` for example, but any other object as well.
 
