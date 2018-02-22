@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'me.tatarka.retrolambda'
 
 group = 'com.github.MFlisar'
 
@@ -17,11 +16,11 @@ android {
     }
     else
     {
-        compileSdkVersion 24
-        buildToolsVersion "24.0.2"
+        compileSdkVersion 27
+        buildToolsVersion "27.0.3"
         defaultConfig {
             minSdkVersion 16
-            targetSdkVersion 24
+            targetSdkVersion 27
         }
     }
 
@@ -30,21 +29,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    retrolambda {
-        jvmArgs '-noverify'
-    }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '25.0.0'
 }
 
 dependencies {
-    compile "io.reactivex.rxjava2:rxjava:2.0.6"
+    compile "io.reactivex.rxjava2:rxjava:2.1.9"
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile "com.github.akarnokd:rxjava2-extensions:0.15.2"
+    compile "com.github.akarnokd:rxjava2-extensions:0.18.6"
 }

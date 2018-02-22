@@ -34,6 +34,11 @@ public class RxDisposableManager
         get().doAddDisposable(boundObject, disposable);
     }
 
+    public static void removeDisposable(Object boundObject, Disposable disposable)
+    {
+        get().doRemoveDisposable(boundObject, disposable);
+    }
+
     public static void unsubscribe(Object boundObject)
     {
         get().doUnsubscribe(boundObject);
@@ -54,6 +59,13 @@ public class RxDisposableManager
         }
         else
             disposables.add(disposable);
+    }
+
+    private void doRemoveDisposable(Object boundObject, Disposable disposable)
+    {
+        CompositeDisposable disposables = mDisposables.get(boundObject.getClass());
+        if (disposables != null)
+            disposables.remove(disposable);
     }
 
     private void doUnsubscribe(Object boundObject)
