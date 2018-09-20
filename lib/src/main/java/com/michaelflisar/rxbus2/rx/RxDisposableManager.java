@@ -23,7 +23,7 @@ public class RxDisposableManager
         return INSTANCE;
     }
 
-    private static HashMap<Class<?>, CompositeDisposable> mDisposables = new HashMap<>();
+    private static HashMap<Object, CompositeDisposable> mDisposables = new HashMap<>();
 
     // ---------------------------
     // public static bus functions
@@ -50,12 +50,12 @@ public class RxDisposableManager
 
     private void doAddDisposable(Object boundObject, Disposable disposable)
     {
-        CompositeDisposable disposables = mDisposables.get(boundObject.getClass());
+        CompositeDisposable disposables = mDisposables.get(boundObject);
         if (disposables == null)
         {
             disposables = new CompositeDisposable();
             disposables.add(disposable);
-            mDisposables.put(boundObject.getClass(), disposables);
+            mDisposables.put(boundObject, disposables);
         }
         else
             disposables.add(disposable);
@@ -63,18 +63,18 @@ public class RxDisposableManager
 
     private void doRemoveDisposable(Object boundObject, Disposable disposable)
     {
-        CompositeDisposable disposables = mDisposables.get(boundObject.getClass());
+        CompositeDisposable disposables = mDisposables.get(boundObject);
         if (disposables != null)
             disposables.remove(disposable);
     }
 
     private void doUnsubscribe(Object boundObject)
     {
-        CompositeDisposable disposables = mDisposables.get(boundObject.getClass());
+        CompositeDisposable disposables = mDisposables.get(boundObject);
         if (disposables != null)
         {
             disposables.dispose();
-            mDisposables.remove(boundObject.getClass());
+            mDisposables.remove(boundObject);
         }
     }
 }
