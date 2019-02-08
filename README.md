@@ -26,7 +26,7 @@ repositories {
 dependencies {
 	implementation 'com.github.MFlisar.RxBus2:lib:<LATEST-VERSION>'
 	// optinonal:
-	// implementation 'com.github.MFlisar.RxBus2:lib-extesnion:<LATEST-VERSION>'
+	// implementation 'com.github.MFlisar.RxBus2:lib-extension:<LATEST-VERSION>'
 	// alternatively, to include ALL modules at once
     // implementation 'com.github.MFlisar:RxBus2:<LATEST-VERSION>'
 }
