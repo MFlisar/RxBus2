@@ -1,6 +1,6 @@
 package com.michaelflisar.rxbus2.demo;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 
 import com.michaelflisar.rxbus2.interfaces.IRxBusQueue;

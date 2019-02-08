@@ -1,0 +1,20 @@
+ext {
+
+    setup = [
+            compileSdk: 28,
+            minSdk    : 16,
+            targetSdk : 28]
+
+    versions = [
+            gradlePlugin: "3.2.1",
+            mavenVersion: "2.0",
+
+            rxjava      : "2.2.6",
+            rxandroid   : "2.1.0",
+            rxextensions: "0.20.6"
+    ]
+
+    androidx = [
+            appcompat: "1.0.2"
+    ]
+}

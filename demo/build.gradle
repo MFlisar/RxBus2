@@ -1,21 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion setup.compileSdk
+
+    defaultConfig {
+        minSdkVersion setup.minSdk
+        targetSdkVersion setup.targetSdk
+
+        applicationId "com.michaelflisar.rxbus2.demo"
+
+        versionCode 1
+        versionName "1.0"
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
-        applicationId "com.michaelflisar.rxbus2.demo"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-    }
     buildTypes {
         release {
             minifyEnabled false
@@ -25,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile project (':lib')
+    implementation project (':lib')
 
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    implementation "androidx.appcompat:appcompat:${androidx.appcompat}"
 }

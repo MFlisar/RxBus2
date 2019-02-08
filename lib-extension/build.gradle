@@ -5,23 +5,11 @@ group = 'com.github.MFlisar'
 
 android {
 
-    if (project.hasProperty('setup.compileSdk'))
-    {
-        compileSdkVersion setup.compileSdk
-        buildToolsVersion setup.buildTools
-        defaultConfig {
-            minSdkVersion setup.minSdk
-            targetSdkVersion setup.targetSdk
-        }
-    }
-    else
-    {
-        compileSdkVersion 27
-        buildToolsVersion "27.0.3"
-        defaultConfig {
-            minSdkVersion 16
-            targetSdkVersion 27
-        }
+    compileSdkVersion setup.compileSdk
+
+    defaultConfig {
+        minSdkVersion setup.minSdk
+        targetSdkVersion setup.targetSdk
     }
 
     compileOptions {
@@ -31,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile project(':lib')
+    api project(':lib')
 
-    compile 'com.android.support:appcompat-v7:27.0.2'
+    implementation "androidx.appcompat:appcompat:${androidx.appcompat}"
 }

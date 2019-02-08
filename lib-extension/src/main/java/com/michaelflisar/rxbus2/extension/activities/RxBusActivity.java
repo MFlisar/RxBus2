@@ -1,13 +1,11 @@
 package com.michaelflisar.rxbus2.extension.activities;
 
-
-import android.support.v7.app.AppCompatActivity;
-
 import com.michaelflisar.rxbus2.interfaces.IRxBusQueue;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
 
 import org.reactivestreams.Publisher;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.processors.BehaviorProcessor;
 
 public class RxBusActivity extends AppCompatActivity implements IRxBusQueue {

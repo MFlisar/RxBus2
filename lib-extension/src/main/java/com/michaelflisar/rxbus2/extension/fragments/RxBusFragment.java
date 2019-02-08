@@ -1,13 +1,11 @@
 package com.michaelflisar.rxbus2.extension.fragments;
 
-
-import android.support.v4.app.Fragment;
-
 import com.michaelflisar.rxbus2.interfaces.IRxBusQueue;
 import com.michaelflisar.rxbus2.rx.RxDisposableManager;
 
 import org.reactivestreams.Publisher;
 
+import androidx.fragment.app.Fragment;
 import io.reactivex.processors.BehaviorProcessor;
 
 public class RxBusFragment extends Fragment implements IRxBusQueue {
