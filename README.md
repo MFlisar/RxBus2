@@ -24,7 +24,11 @@ repositories {
 2. add the compile statement to your module's `build.gradle`:
 ```groovy
 dependencies {
-    compile 'com.github.MFlisar:RxBus2:<LATEST-VERSION>'
+	implementation 'com.github.MFlisar.RxBus2:lib:<LATEST-VERSION>'
+	// optinonal:
+	// implementation 'com.github.MFlisar.RxBus2:lib-extesnion:<LATEST-VERSION>'
+	// alternatively, to include ALL modules at once
+    // implementation 'com.github.MFlisar:RxBus2:<LATEST-VERSION>'
 }
 ```
 
